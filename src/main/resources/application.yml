@@ -15,3 +15,8 @@ spring:
 
 mybatis:
   mapper-locations: classpath*:mapper/*Mapper.xml
+
+
+wx:
+  appid: wx63dab629f3e125f8
+  appSecret: 424dd420e72e0c8dc9458ab2e2ad2ccc

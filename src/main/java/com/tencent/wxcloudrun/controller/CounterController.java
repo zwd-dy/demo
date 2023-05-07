@@ -20,7 +20,6 @@ import java.util.List;
  * counter控制器
  */
 @RestController
-
 public class CounterController {
 
   final CounterService counterService;
@@ -79,5 +78,5 @@ public class CounterController {
       return ApiResponse.error("参数action错误");
     }
   }
-  
+
 }
