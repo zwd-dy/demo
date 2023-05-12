@@ -44,6 +44,9 @@ public class LoginController {
 
         // 4.校验签名 小程序发送的签名signature与服务器端生成的签名signature2 = sha1(rawData + sessionKey)
         String signature2 = DigestUtils.sha1Hex(loginDto.getRawData() + sessionKey);
+        System.out.println("openid:"+openid);
+        System.out.println("sessionKey:"+sessionKey);
+        System.out.println("signature2:"+signature2);
         if (!loginDto.getSignature().equals(signature2)) {
             return ApiResponse.error("签名校验失败");
         }
