@@ -28,7 +28,7 @@ public class WarrantyInfoController {
         LambdaQueryWrapper<WarrantyInfo> query = Wrappers.lambdaQuery();
 
         if(!StringUtils.isEmpty(carNumber)){
-            query.eq(WarrantyInfo::getNickname,carNumber);
+            query.eq(WarrantyInfo::getCarNumber,carNumber);
         }
         if(!StringUtils.isEmpty(phone)){
 //            query.or().eq(WarrantyInfo::getPhone,phone);
