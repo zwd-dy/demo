@@ -16,7 +16,7 @@ public class WarrantyInfoServiceImpl extends ServiceImpl<WarrantyInfoMapper, War
         // 伪联合主键（用户姓名+车牌号）判断是否存在
         LambdaQueryWrapper<WarrantyInfo> lqw = Wrappers.lambdaQuery();
         lqw
-                .eq(WarrantyInfo::getNickname, info.getNickname()).or()
+                .eq(WarrantyInfo::getPhone, info.getPhone()).or()
                 .eq(WarrantyInfo::getCarNumber, info.getCarNumber());
         WarrantyInfo one = this.getOne(lqw);
         if(one != null){
