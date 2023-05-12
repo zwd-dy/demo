@@ -24,6 +24,8 @@ public class WarrantyInfoController {
 
     @GetMapping("/get")
     public ApiResponse get(String carNumber,String phone){
+        System.out.println("carNumber："+carNumber);
+        System.out.println("phone："+phone);
         WarrantyInfo info = null;
         LambdaQueryWrapper<WarrantyInfo> query = Wrappers.lambdaQuery();
 
