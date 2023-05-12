@@ -23,16 +23,16 @@ public class WarrantyInfoController {
     }
 
     @GetMapping("/get")
-    public ApiResponse get(String nickname,String phone){
+    public ApiResponse get(String nickname,String carNumber){
         WarrantyInfo info = null;
         LambdaQueryWrapper<WarrantyInfo> query = Wrappers.lambdaQuery();
 
         if(!StringUtils.isEmpty(nickname)){
             query.eq(WarrantyInfo::getNickname,nickname);
         }
-        if(!StringUtils.isEmpty(phone)){
+        if(!StringUtils.isEmpty(carNumber)){
 //            query.or().eq(WarrantyInfo::getPhone,phone);
-            query.and(i->i.eq(WarrantyInfo::getPhone,phone));
+            query.and(i->i.eq(WarrantyInfo::getCarNumber,carNumber));
         }
 
         try {

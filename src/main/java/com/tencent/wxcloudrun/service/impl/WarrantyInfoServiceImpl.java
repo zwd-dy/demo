@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 public class WarrantyInfoServiceImpl extends ServiceImpl<WarrantyInfoMapper, WarrantyInfo> implements WarrantyInfoService {
     @Override
     public ApiResponse addInfo(WarrantyInfo info) {
-        // 伪联合主键（用户姓名+手机号）判断是否存在
+        // 伪联合主键（用户姓名+车牌号）判断是否存在
         LambdaQueryWrapper<WarrantyInfo> lqw = Wrappers.lambdaQuery();
         lqw
                 .eq(WarrantyInfo::getNickname, info.getNickname()).or()
-                .eq(WarrantyInfo::getPhone, info.getPhone());
+                .eq(WarrantyInfo::getCarNumber, info.getCarNumber());
         WarrantyInfo one = this.getOne(lqw);
         if(one != null){
             return ApiResponse.error("用户质保信息已存在，请勿重复添加");
