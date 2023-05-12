@@ -7,6 +7,7 @@ import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.model.WarrantyInfo;
 import com.tencent.wxcloudrun.service.WarrantyInfoService;
 import com.tencent.wxcloudrun.utils.ExcelUtil;
+import com.tencent.wxcloudrun.utils.HttpClientUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -56,20 +57,22 @@ public class WarrantyInfoController {
 
     @GetMapping("/getExcel")
     public void getExcel(HttpServletResponse response) {
-        List<WarrantyInfo> infoList = warrantyInfoService.list();
-        if (infoList != null || infoList.size() > 0) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-            String time = format.format(new Date());
-            time = time.replaceAll("-", "").replaceAll(":", "").replaceAll(" ", "");
-            String fileName = "质保数据" + time;
-            String sheetName = "质保数据";
-            try {
-                ExcelUtil.writeExcel(response, infoList, fileName, sheetName, new WarrantyInfo());
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        String s = HttpClientUtil.doGet("http://api.weixin.qq.com/_/cos/getauth");
+        System.out.println("临时："+s);
+//        List<WarrantyInfo> infoList = warrantyInfoService.list();
+//        if (infoList != null || infoList.size() > 0) {
+//            SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+//            String time = format.format(new Date());
+//            time = time.replaceAll("-", "").replaceAll(":", "").replaceAll(" ", "");
+//            String fileName = "质保数据" + time;
+//            String sheetName = "质保数据";
+//            try {
+//                ExcelUtil.writeExcel(response, infoList, fileName, sheetName, new WarrantyInfo());
+//
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
 
 
     }
