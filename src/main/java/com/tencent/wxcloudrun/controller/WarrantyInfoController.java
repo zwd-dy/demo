@@ -70,10 +70,16 @@ public class WarrantyInfoController {
 
     @GetMapping("/getExcel")
     public void getExcel(HttpServletResponse response) {
-        JSONObject jsonObject = JSON.parseObject(HttpClientUtil.doGet("http://api.weixin.qq.com/_/cos/getauth"));
+        String s = HttpClientUtil.doGet("http://api.weixin.qq.com/_/cos/getauth");
+        System.out.println("对象存储："+s);
+        JSONObject jsonObject = JSON.parseObject(s);
         String secretId = jsonObject.getString("TmpSecretId");
         String secretKey = jsonObject.getString("TmpSecretKey");
         String token = jsonObject.getString("Token");
+        System.out.println("secretId："+secretId);
+        System.out.println("secretKey："+secretKey);
+        System.out.println("token："+token);
+
         ClientConfig clientConfig = new ClientConfig(new Region("ap-shanghai"));
         COSCredentials cosCredentials = new BasicSessionCredentials(secretId, secretKey, token);
         COSClient cosClient = new COSClient(cosCredentials, clientConfig);
@@ -106,3 +112,4 @@ public class WarrantyInfoController {
     }
 
 }
+
