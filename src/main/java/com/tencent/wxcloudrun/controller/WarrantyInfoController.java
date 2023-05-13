@@ -69,16 +69,17 @@ public class WarrantyInfoController {
     }
 
     @GetMapping("/getExcel")
-    public void getExcel(HttpServletResponse response) {
+    public void getExcel() {
         String s = HttpClientUtil.doGet("http://api.weixin.qq.com/_/cos/getauth");
         System.out.println("对象存储："+s);
         JSONObject jsonObject = JSON.parseObject(s);
-        String secretId = jsonObject.getString("TmpSecretId");
-        String secretKey = jsonObject.getString("TmpSecretKey");
-        String token = jsonObject.getString("Token");
-        System.out.println("secretId："+secretId);
-        System.out.println("secretKey："+secretKey);
-        System.out.println("token："+token);
+//        String secretId = jsonObject.getString("TmpSecretId");
+//        String secretKey = jsonObject.getString("TmpSecretKey");
+//        String token = jsonObject.getString("Token");
+
+        String secretId = "AKIDUs-32vdL7iMvxml96ZaQmY3FEys_4-FoCPzqfLDx8NCyssfZP6upI8ld1zaIQydy";
+        String secretKey = "vw6BEp7ouVpSGkICL0MxVqqpDigleDG8TLmf97Qod0M=";
+        String token = "StTRv6zdmmgf7luHxXXueEzP7HUiqO1a7064e3ee4adf11066556e035528571d9UZZP1RLixTFtDIkRl879DzXjKKnDNahobdbB-DLuqcJZ_UdRcyasnkP62p3YZ4Zm2-36UwqANfQxd3lSHQgEpX03bwdwptYjU1QWSC9RtnngwEg4Q-wo9t57DWAPKsPu582-PSL3gYW2QUbMQdxWk5CrGRabYwGL_eetLgtBISoEQcOSNVjN98Z0RyDJ7MLZX3SE3E6tXaQnYJj796Wn0nBMI8rUTIjkH5zBSnak6DrxZt4y6ROJIVLXCOEM4kM4oxy3_C0F0cdsBUcX4Ll7piXDbz3EN9jpT4OFKqvZYTIP8RmF8uAPvV5VHcup3ryqZ7jTOLlnuYnQCN8_P_VboJ6k1fIhTBrAu0ZXXxKuPOOkkXHeFWMx2fLlWkUmAnkcic1rwqTIpfonzvhAzidSshoP1zbhspK2b4CDxiqxs2xTVWtjpO6V3zm3IyHI2IVOX0ACPqMs43iOHTf1-Lu5owc90G1r7Q_WkDqr0RaICgk";
 
         ClientConfig clientConfig = new ClientConfig(new Region("ap-shanghai"));
         COSCredentials cosCredentials = new BasicSessionCredentials(secretId, secretKey, token);
@@ -102,8 +103,11 @@ public class WarrantyInfoController {
 
             byte[] buffer = os.toByteArray();
             InputStream sbs = new ByteArrayInputStream(buffer);
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentLength(buffer.length);
+
 //            //创建存储对象的请求
-            PutObjectRequest putObjectRequest = new PutObjectRequest("7072-prod-0guxo16k879428da-1310128581", "excel", sbs,new ObjectMetadata());
+            PutObjectRequest putObjectRequest = new PutObjectRequest("7072-prod-0guxo16k879428da-1310128581", "excel.xlsx", sbs,objectMetadata);
             //执行上传
             cosClient.putObject(putObjectRequest);
         }
