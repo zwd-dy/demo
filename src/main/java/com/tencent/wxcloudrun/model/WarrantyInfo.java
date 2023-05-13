@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
 
 @Data
 @AllArgsConstructor
@@ -67,7 +69,7 @@ public class WarrantyInfo extends BaseRowModel  {
      * 施工日期
      */
     @ExcelProperty(value = {"施工日期"}, index = 10)
-    private Long buildDate;
+    private String buildDate;
     /**
      * 安装技师
      */
