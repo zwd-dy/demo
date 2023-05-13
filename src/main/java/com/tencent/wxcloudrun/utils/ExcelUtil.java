@@ -106,6 +106,24 @@ public class ExcelUtil {
         writer.finish();
     }
 
+    public static void writeExcel2(OutputStream os, List<? extends BaseRowModel> list, String fileName,
+                                  String sheetName, BaseRowModel object) {
+        ExcelWriter writer = new ExcelWriter(os, ExcelTypeEnum.XLSX);
+        Sheet sheet = new Sheet(1, 0, object.getClass());
+        sheet.setSheetName(sheetName);
+
+        TableStyle tableStyle = new TableStyle();
+        tableStyle.setTableContentBackGroundColor(IndexedColors.WHITE);
+        Font font = new Font();
+        font.setFontHeightInPoints((short) 9);
+        tableStyle.setTableHeadFont(font);
+        tableStyle.setTableContentFont(font);
+        sheet.setTableStyle(tableStyle);
+
+        writer.write(list, sheet);
+        writer.finish();
+    }
+
     /**
      * 导出 Excel ：多个 sheet，带表头
      *
@@ -169,6 +187,7 @@ public class ExcelUtil {
             throw new MsgmanageException("导出异常！");
         }
     }
+
 
     /**
      * 返回 ExcelReader
