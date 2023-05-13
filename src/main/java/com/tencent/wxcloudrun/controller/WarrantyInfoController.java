@@ -11,6 +11,7 @@ import com.qcloud.cos.auth.BasicSessionCredentials;
 import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.model.ObjectMetadata;
 import com.qcloud.cos.model.PutObjectRequest;
+import com.qcloud.cos.model.PutObjectResult;
 import com.qcloud.cos.region.Region;
 import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.model.WarrantyInfo;
@@ -18,6 +19,7 @@ import com.tencent.wxcloudrun.service.WarrantyInfoService;
 import com.tencent.wxcloudrun.utils.ExcelUtil;
 import com.tencent.wxcloudrun.utils.HttpClientUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +28,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +39,10 @@ public class WarrantyInfoController {
 
     @Autowired
     private WarrantyInfoService warrantyInfoService;
+    @Value("${wx.regionName}")
+    private String regionName;
+    @Value("${wx.bucketName}")
+    private String bucketName;
 
     @PostMapping("/save")
     public ApiResponse save(@RequestBody WarrantyInfo info) {
@@ -69,19 +76,19 @@ public class WarrantyInfoController {
     }
 
     @GetMapping("/getExcel")
-    public void getExcel() {
+    public ApiResponse getExcel() {
+        URL url = null;
         String s = HttpClientUtil.doGet("http://api.weixin.qq.com/_/cos/getauth");
-        System.out.println("对象存储："+s);
+        System.out.println( "对象存储："+s);
         JSONObject jsonObject = JSON.parseObject(s);
-//        String secretId = jsonObject.getString("TmpSecretId");
-//        String secretKey = jsonObject.getString("TmpSecretKey");
-//        String token = jsonObject.getString("Token");
+        String secretId = jsonObject.getString("TmpSecretId");
+        String secretKey = jsonObject.getString("TmpSecretKey");
+        String token = jsonObject.getString("Token");
+//        String secretId = "AKIDxoI2UHo_zwks3RT-JT5MCiDAUXPRo1AUSxSzVM3XZqkRvTj9e87o8oWna_8OnYd7";
+//        String secretKey = "le5ZtiKzW1Qm0XBDQ9qC77XryvrLBTN+qDBdSGL94PU=";
+//        String token = "StTRv6zdmmgf7luHxXXueEzP7HUiqO1a382f157fe2a3d26348a03dc6a7775b54UZZP1RLixTFtDIkRl879D8VZq6PZ_W7GWF2hvOJvyfp9mqCZPgfBGNSf3IyRSLTPDEkmGqzhO_8oJk6e7t-fpmEoneje55-F2g-yZhInm1vVgSZAfezNZ4tsfIUBJKqKYLpuMZR6HYgz1yqvDVvfZJFgf1mfnrN4IEDM_mFDzpemfgLMKGEoN21tkPavvCAb7XgXSZzIL70EJzCq5Xqot3f7jfzLZbbtD7O0lchaOub8MGWhaKWCxjp9T_k1XuTDYvhPcIHZosse7meqaPWplffLCXCLrOl1kn2EMWPIvHMB43VWFZU4gkh7gXBWg9QQfuk9oJbQD0IPJ1_IJmTAs5w4bL76xC1FbH6o0th3UkfZG_VCbzeELAI22A8M7ds8WOB0ry4bFCLr0xbN488JMlrv3Q30XZ176R0WQVf-CWEis0hU3Aa9DxsLjJnL3iPMe7w8P_l9o-nmRLlcN9kVLtaRHWpyRLdIfYTNn29xESk";
 
-        String secretId = "AKIDUs-32vdL7iMvxml96ZaQmY3FEys_4-FoCPzqfLDx8NCyssfZP6upI8ld1zaIQydy";
-        String secretKey = "vw6BEp7ouVpSGkICL0MxVqqpDigleDG8TLmf97Qod0M=";
-        String token = "StTRv6zdmmgf7luHxXXueEzP7HUiqO1a7064e3ee4adf11066556e035528571d9UZZP1RLixTFtDIkRl879DzXjKKnDNahobdbB-DLuqcJZ_UdRcyasnkP62p3YZ4Zm2-36UwqANfQxd3lSHQgEpX03bwdwptYjU1QWSC9RtnngwEg4Q-wo9t57DWAPKsPu582-PSL3gYW2QUbMQdxWk5CrGRabYwGL_eetLgtBISoEQcOSNVjN98Z0RyDJ7MLZX3SE3E6tXaQnYJj796Wn0nBMI8rUTIjkH5zBSnak6DrxZt4y6ROJIVLXCOEM4kM4oxy3_C0F0cdsBUcX4Ll7piXDbz3EN9jpT4OFKqvZYTIP8RmF8uAPvV5VHcup3ryqZ7jTOLlnuYnQCN8_P_VboJ6k1fIhTBrAu0ZXXxKuPOOkkXHeFWMx2fLlWkUmAnkcic1rwqTIpfonzvhAzidSshoP1zbhspK2b4CDxiqxs2xTVWtjpO6V3zm3IyHI2IVOX0ACPqMs43iOHTf1-Lu5owc90G1r7Q_WkDqr0RaICgk";
-
-        ClientConfig clientConfig = new ClientConfig(new Region("ap-shanghai"));
+        ClientConfig clientConfig = new ClientConfig(new Region(regionName));
         COSCredentials cosCredentials = new BasicSessionCredentials(secretId, secretKey, token);
         COSClient cosClient = new COSClient(cosCredentials, clientConfig);
 
@@ -107,12 +114,13 @@ public class WarrantyInfoController {
             objectMetadata.setContentLength(buffer.length);
 
 //            //创建存储对象的请求
-            PutObjectRequest putObjectRequest = new PutObjectRequest("7072-prod-0guxo16k879428da-1310128581", "excel.xlsx", sbs,objectMetadata);
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, fileName+".xlsx", sbs,objectMetadata);
             //执行上传
             cosClient.putObject(putObjectRequest);
+            url = cosClient.getObjectUrl(bucketName, fileName + ".xlsx");
+
         }
-
-
+        return ApiResponse.ok(url);
     }
 
 }
