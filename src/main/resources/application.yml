@@ -21,9 +21,11 @@ mybatis:
 #  appid: wx63dab629f3e125f8
 #  appSecret: 424dd420e72e0c8dc9458ab2e2ad2ccc
 wx:
-  env: prod-0guxo16k879428da
-  appid: wxca41bc7e884703d2
-  appSecret: f88aa8aa3ae78c08a9f8f29a37bc6d45
+  env: prod-3gg7zfic1e6c0e19
+#  appid: wxca41bc7e884703d2
+#  appSecret: f88aa8aa3ae78c08a9f8f29a37bc6d45
+  appid: wx63dab629f3e125f8
+  appSecret: 424dd420e72e0c8dc9458ab2e2ad2ccc
   regionName: ap-shanghai
   bucketName: 7072-prod-0guxo16k879428da-1310128581
 
